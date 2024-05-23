@@ -1,0 +1,13 @@
+.container {
+    padding: 10px;
+}
+
+.root {
+    width: 20px;
+}
+
+.noti {
+    position: absolute;
+  bottom: 50px;
+  right: 20px;
+}
