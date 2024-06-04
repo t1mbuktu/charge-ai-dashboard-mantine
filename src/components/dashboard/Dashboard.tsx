@@ -35,7 +35,7 @@ function Dashboard() {
             setShowAuthModal(false);
             dispatch(fetchCars(currentUser.id!));
             dispatch(fetchSims(currentUser.id!));
-            dispatch(fetchSettings(currentUser.id!))
+            dispatch(fetchSettings(currentUser.id!));
         } else {
             setShowAuthModal(true);
         }

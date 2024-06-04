@@ -3,6 +3,7 @@ import { StateStatus } from "../../models/enums/StateStatus";
 import { SettingsState } from "./SettingsState";
 import { GeneralSettings } from "../../models/GeneralSettings";
 import { SettingsService } from "../../services/SettingsService";
+import { GeoService } from "../../services/GeoService";
 
 const initialState: SettingsState = {
     settings: undefined,
@@ -14,10 +15,11 @@ export const fetchSettings = createAsyncThunk('sims/fetchSettings', async (userI
 });
 
 export const saveSettings = createAsyncThunk('sims/saveSettings', async (settings: GeneralSettings): Promise<GeneralSettings> => {
+    const location = await GeoService.zipToCords(settings.zip!);
     if(settings.id) {
-        return await SettingsService.update(settings);
+        return await SettingsService.update({...settings, location: location});
     } else {
-        return await SettingsService.add(settings);
+        return await SettingsService.add({...settings, location: location});
     }
 });
 

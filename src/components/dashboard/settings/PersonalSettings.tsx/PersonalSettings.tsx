@@ -41,8 +41,8 @@ function PersonalSettings() {
                         rightSection={'m²'}
                         rightSectionWidth={36}
                         withAsterisk
-                        defaultValue={settingsToEdit.pvSurfaceArea}
-                        onChange={v => setSettingsToEdit({...settingsToEdit, pvSurfaceArea: Number(v)})}
+                        defaultValue={settingsToEdit.surface}
+                        onChange={v => setSettingsToEdit({...settingsToEdit, surface: Number(v)})}
                     />
                     <NumberInput
                         label={'Number of modules'}
@@ -50,8 +50,8 @@ function PersonalSettings() {
                         rightSection={'pcs'}
                         rightSectionWidth={45}
                         withAsterisk
-                        defaultValue={settingsToEdit.numberOfPvModules}
-                        onChange={v => setSettingsToEdit({...settingsToEdit, numberOfPvModules: Number(v)})}
+                        defaultValue={settingsToEdit.numberOfSolarModules}
+                        onChange={v => setSettingsToEdit({...settingsToEdit, numberOfSolarModules: Number(v)})}
                     />
                     <NumberInput
                         label={'Power per module'}

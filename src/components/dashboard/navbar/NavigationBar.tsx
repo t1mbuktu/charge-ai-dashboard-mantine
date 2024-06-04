@@ -9,7 +9,9 @@ import CarSettingsModal from '../overview/live-stats-card/car-settings-modal/Car
 import { useDisclosure } from '@mantine/hooks';
 import SettingsModal from '../settings/SettingsModal';
 
-const pages = [Pages.Overview, Pages.DepartureTimes, Pages.Savings];
+//const pages = [Pages.Overview, Pages.DepartureTimes, Pages.Savings];
+const pages: Pages[] = [];
+
 
 type props = {
     onNavigate: (page: Pages) => void

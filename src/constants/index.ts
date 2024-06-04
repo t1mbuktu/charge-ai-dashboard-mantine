@@ -1,0 +1,2 @@
+export const reportURI = 'https://europe-west3-charge-ai-gcloud.cloudfunctions.net/on_report_request'
+export const geoApiURI = 'https://maps.googleapis.com/maps/api/geocode/json?address=${ZIP}&key=${API_KEY}'
