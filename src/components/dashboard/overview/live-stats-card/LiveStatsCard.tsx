@@ -4,8 +4,8 @@ import { Car } from '../../../../models/Car'
 import { ActionIcon, Group, Progress, Title, Text } from '@mantine/core'
 import { IconAdjustmentsHorizontal, IconCar, IconClock } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
-import CarSettingsModal from './car-settings-modal/CarSettingsModal'
-import DepartureArivalDrawer from './departure-arival-drawer/DepartureArivalDrawer'
+import CarSettingsModal from '../car-settings-modal/CarSettingsModal'
+import DepartureArivalDrawer from '../departure-arival-drawer/DepartureArivalDrawer'
 
 type Props = {
     car: Car

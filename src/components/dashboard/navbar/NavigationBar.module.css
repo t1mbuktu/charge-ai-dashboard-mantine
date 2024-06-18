@@ -37,7 +37,12 @@
     cursor: pointer;
 }
 
+.img {
+    padding: 7px;
+}
+
 .imgdrk {
+    padding: 7px;
     cursor: pointer;
     filter: hue-rotate(180deg) invert();
 }

@@ -1,5 +1,5 @@
 import { BarChart, ChartTooltipProps, LineChart } from "@mantine/charts"
-import { Paper, Title, Text, SegmentedControl, Group, ActionIcon, Stack } from "@mantine/core";
+import { Paper, Title, Text, SegmentedControl, Group, ActionIcon, Stack, Box } from "@mantine/core";
 
 import classes from './ChargePreviewChartCard.module.css'
 import PaperCard from "../../../shared/card/PaperCard";
@@ -9,6 +9,8 @@ import { getReport } from "../../../../redux/report/ReportSlice";
 import { ChargeForecast, ChargeForecastEntry } from "../../../../models/Report";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { StateStatus } from "../../../../models/enums/StateStatus";
+import LoadingOverlay from "../../../shared/loading-overlay/LoadingOverlay";
 
 function ChartTooltip({ label, payload }: ChartTooltipProps) {
   if (!payload) return null;
@@ -45,11 +47,11 @@ function ChargePreviewChartCard() {
   const { cars } = useAppSelector(s => s.cars)
   const { simEntries } = useAppSelector(s => s.sims)
   const { settings } = useAppSelector(s => s.settings)
-  const { report } = useAppSelector(s => s.report)
+  const { report, status } = useAppSelector(s => s.report)
 
   const [selectedCarId, setSelectedCarId] = useState<string | undefined>(cars.length > 0 ? cars[0].id : undefined)
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(0)
-  const [nextSevenDays, setNextSevenDays] = useState(getNextSevenDays())
+  const nextSevenDays = getNextSevenDays()
 
   const onCreateReport = () => {
     dispatch(getReport({ settings: settings!, sim_data: simEntries, cars: cars }));
@@ -114,106 +116,109 @@ function ChargePreviewChartCard() {
 
   return (
     <PaperCard>
-      <Group className={classes.heading} justify="space-between">
-        <Title order={3}>Charging Preview</Title>
-        {cars.length !== 0 &&
-          <Group>
-            <SegmentedControl
-              className={classes.sgmtcrtl}
-              defaultValue={cars[0].id}
-              data={cars.map(car => ({ label: car.name, value: car.id! }))}
-              size="xs"
-              onChange={v => setSelectedCarId(v)}
-            />
-            <ActionIcon
-              variant="light"
-              onClick={onCreateReport}
-            >
-              <IconRefresh />
-            </ActionIcon>
-          </Group>
-        }
-      </Group>
-      <Stack gap={"50px"}>
-        {report && cars.length > 0 &&
-          <BarChart
-            h={300}
-            data={
-              getCumulativeData(report!.smartChargingForecast.chargeForecast
-                .filter(f => f.carId === selectedCarId)[0].data)
-                .map(v => ({
-                  Date: dayjs(v.date).format('DD.MM'),
-                  Solar: v.chargingSpeedSolar,
-                  Grid: v.chargingSpeedGrid
-                }))
-            }
-            unit="kWh"
-            dataKey="Date"
-            type="stacked"
-            series={[
-              { name: 'Solar', color: 'green.7' },
-              { name: 'Grid', color: 'yellow.7' },
-            ]}
-          />
-        }
-
-        {report && cars.length > 0 &&
-          <Stack>
-            <Group justify="space-between">
-              {nextSevenDays[selectedDateIndex]}
-              <ActionIcon.Group>
-                <ActionIcon
-                  variant="light"
-                  onClick={() => setSelectedDateIndex(selectedDateIndex - 1 < 0 ? nextSevenDays.length - 1 : selectedDateIndex - 1)}
-                >
-                  <IconChevronLeft />
-                </ActionIcon>
-                <ActionIcon
-                  variant="light"
-                  onClick={() => setSelectedDateIndex(selectedDateIndex + 1 === nextSevenDays.length
-                    ?
-                    0
-                    :
-                    selectedDateIndex + 1
-                  )}
-                >
-                  <IconChevronRight />
-                </ActionIcon>
-              </ActionIcon.Group>
+        <Group className={classes.heading} justify="space-between">
+          <Title order={3}>Charging Preview</Title>
+          {cars.length !== 0 &&
+            <Group>
+              <SegmentedControl
+                className={classes.sgmtcrtl}
+                defaultValue={cars[0].id}
+                data={cars.map(car => ({ label: car.name, value: car.id! }))}
+                size="xs"
+                onChange={v => setSelectedCarId(v)}
+              />
+              <ActionIcon
+                variant="light"
+                onClick={onCreateReport}
+              >
+                <IconRefresh />
+              </ActionIcon>
             </Group>
-            <LineChart
+          }
+        </Group>
+        <Box pos="relative">
+        {status == StateStatus.loading && <LoadingOverlay />}
+        <Stack gap={"50px"}>
+          {report && cars.length > 0 &&
+            <BarChart
               h={300}
               data={
-                getGroupedDataByDate(report!.smartChargingForecast.chargeForecast)
-                [selectedCarId!][getNextSevenDays()[selectedDateIndex]]
-                  .map(v => (
-                    {
-                      date: dayjs(v.date).format('HH:mm'),
-                      speedGrid: v.chargingSpeedGrid,
-                      speedSolar: v.chargingSpeedSolar,
-                      solarForecast: v.solarForecast
-                    })).slice(0, 24)
+                getCumulativeData(report!.smartChargingForecast.chargeForecast
+                  .filter(f => f.carId === selectedCarId)[0].data)
+                  .map(v => ({
+                    Date: dayjs(v.date).format('DD.MM'),
+                    Solar: v.chargingSpeedSolar,
+                    Grid: v.chargingSpeedGrid
+                  }))
               }
-              dataKey="date"
-              withLegend
-              legendProps={{ verticalAlign: 'bottom', height: 50 }}
               unit="kWh"
-              tooltipAnimationDuration={200}
-              tooltipProps={{
-                content: ({ label, payload }) => <ChartTooltip label={label} payload={payload} />,
-              }}
+              dataKey="Date"
+              type="stacked"
               series={[
-                { name: 'solarForecast', color: 'gray.6' },
-                { name: 'speedSolar', color: 'green.7' },
-                { name: 'speedGrid', color: 'yellow.7' },
+                { name: 'Solar', color: 'green.7' },
+                { name: 'Grid', color: 'yellow.7' },
               ]}
-              curveType="monotone"
-              withDots={false}
-              connectNulls={false}
             />
-          </Stack>
-        }
-      </Stack>
+          }
+
+          {report && cars.length > 0 &&
+            <Stack>
+              <Group justify="space-between">
+                {dayjs(nextSevenDays[selectedDateIndex]).format('DD.MM.YYYY')}
+                <ActionIcon.Group>
+                  <ActionIcon
+                    variant="light"
+                    onClick={() => setSelectedDateIndex(selectedDateIndex - 1 < 0 ? nextSevenDays.length - 1 : selectedDateIndex - 1)}
+                  >
+                    <IconChevronLeft />
+                  </ActionIcon>
+                  <ActionIcon
+                    variant="light"
+                    onClick={() => setSelectedDateIndex(selectedDateIndex + 1 === nextSevenDays.length
+                      ?
+                      0
+                      :
+                      selectedDateIndex + 1
+                    )}
+                  >
+                    <IconChevronRight />
+                  </ActionIcon>
+                </ActionIcon.Group>
+              </Group>
+              <LineChart
+                h={300}
+                data={
+                  getGroupedDataByDate(report!.smartChargingForecast.chargeForecast)
+                  [selectedCarId!][getNextSevenDays()[selectedDateIndex]]
+                    .map(v => (
+                      {
+                        date: dayjs(v.date).format('HH:mm'),
+                        speedGrid: v.chargingSpeedGrid,
+                        speedSolar: v.chargingSpeedSolar,
+                        solarForecast: v.solarForecast
+                      })).slice(0, 24)
+                }
+                dataKey="date"
+                withLegend
+                legendProps={{ verticalAlign: 'bottom', height: 50 }}
+                unit="kWh"
+                tooltipAnimationDuration={200}
+                tooltipProps={{
+                  content: ({ label, payload }) => <ChartTooltip label={label} payload={payload} />,
+                }}
+                series={[
+                  { name: 'solarForecast', color: 'gray.6' },
+                  { name: 'speedSolar', color: 'green.7' },
+                  { name: 'speedGrid', color: 'yellow.7' },
+                ]}
+                curveType="monotone"
+                withDots={false}
+                connectNulls={false}
+              />
+            </Stack>
+          }
+        </Stack>
+      </Box>
     </PaperCard>
   )
 }

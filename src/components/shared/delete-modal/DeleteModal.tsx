@@ -10,7 +10,7 @@ type Props = {
 
 function DeleteModal({itemToDelete, onDelete, show, onDismiss}: Props) {
   return (
-    <Modal opened={show} onClose={onDismiss} title={'Delete?'}>
+    <Modal opened={show} onClose={onDismiss} title={'Delete?'} closeOnEscape={false}>
         <Text className={classes.body}>
             {`Are you shure you want to delete ${itemToDelete}?`}
         </Text>

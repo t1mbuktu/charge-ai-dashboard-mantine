@@ -1,5 +1,5 @@
 .container {
-    padding: 10px;
+
 }
 
 .root {
@@ -8,6 +8,6 @@
 
 .noti {
     position: absolute;
-  bottom: 50px;
-  right: 20px;
+    bottom: 50px;
+    right: 20px;
 }

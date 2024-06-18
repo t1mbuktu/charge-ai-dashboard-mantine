@@ -9,13 +9,15 @@ import { getLoggedInUser } from '../../redux/common/CommonSlice'
 import { fetchCars } from '../../redux/car/CarSlice'
 import { fetchSims } from '../../redux/simulation-entries/SimulationEntriesSlice'
 import { fetchSettings } from '../../redux/settings/SettingsSlice'
+import InitialSetupModal from '../shared/initial-setup/InitialSetupModal'
 
 function Dashboard() {
     const dispatch = useAppDispatch()
     const [currentPage, setCurrentPage] = useState<Pages>(Pages.Overview);
-    const {currentUser} =  useAppSelector(s => s.common)
+    const {currentUser} =  useAppSelector(s => s.common);
 
-    const [showAuthModal, setShowAuthModal] = useState(true)
+    const [showAuthModal, setShowAuthModal] = useState(true);
+    const [showInitalSetup, setShowInitialSetup] = useState(true);
     
     const getContent = (): JSX.Element => {
         switch (currentPage) {
@@ -51,6 +53,7 @@ function Dashboard() {
         <NavigationBar onNavigate={(p) => setCurrentPage(p)}/>
         { getContent() }
         <LoginModal show={showAuthModal} onDismiss={() => console.log("first")} />
+        <InitialSetupModal show={showInitalSetup} onDismiss={() => setShowInitialSetup(false)} />
     </>
   );
 }

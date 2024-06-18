@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Container, Group, Image, Avatar, Menu, rem, Center, Box, useMantineColorScheme, ActionIcon } from '@mantine/core';
+import { Text, Container, Group, Image, Avatar, Menu, rem, Center, Box, useMantineColorScheme, ActionIcon, Button } from '@mantine/core';
 import classes from './NavigationBar.module.css'
 import { Pages } from '../../../models/enums/Pages';
-import { IconLogout, IconMoon, IconPlus, IconSettings, IconSun } from '@tabler/icons-react';
+import { IconLogout, IconMoon, IconPlus, IconSend, IconSettings, IconSun } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signOutUser } from '../../../redux/common/CommonSlice';
-import CarSettingsModal from '../overview/live-stats-card/car-settings-modal/CarSettingsModal';
+import CarSettingsModal from '../overview/car-settings-modal/CarSettingsModal';
 import { useDisclosure } from '@mantine/hooks';
 import SettingsModal from '../settings/SettingsModal';
+import NewsletterModal from '../../shared/newsletter-modal/NewsletterModal';
 
 //const pages = [Pages.Overview, Pages.DepartureTimes, Pages.Savings];
 const pages: Pages[] = [];
@@ -23,6 +24,7 @@ function NavigationBar({onNavigate}: props) {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const [showAddCarModal, { toggle: toggleAddCarModal }] = useDisclosure(false);
     const [showSettingsModal, { toggle: toggleShowSettingsModal }] = useDisclosure(false);
+    const [showNewsetterModal, { toggle: toggleNewsletterModal }] = useDisclosure(false);
 
     const { currentUser } = useAppSelector(s => s.common)
 
@@ -46,7 +48,7 @@ function NavigationBar({onNavigate}: props) {
             <Container size='100%' className={classes.inner}>
                 <Group>
                     <Image
-                        className={colorScheme === 'light' ? classes.pnt : classes.imgdrk}
+                        className={colorScheme === 'light' ? classes.img : classes.imgdrk}
                         h={50}
                         src='/src/assets/logo.png'
                         onClick={() => onNavigate(Pages.Overview)}
@@ -57,6 +59,12 @@ function NavigationBar({onNavigate}: props) {
                     </Group>
                 </Group>
                 <Group>
+                <Button variant="light" onClick={toggleNewsletterModal}>
+                    <Group gap={7}>
+                        <Text>Newsletter</Text>
+                        <IconSend size='20' />
+                    </Group>
+                </Button>
                 <ActionIcon variant='light' onClick={toggleColorScheme}>
                     {colorScheme === 'light' ? <IconMoon /> : <IconSun/>}                   
                 </ActionIcon>
@@ -103,9 +111,8 @@ function NavigationBar({onNavigate}: props) {
                 maxChargeSpeed: 0
             }} show={showAddCarModal} onDismiss={toggleAddCarModal} 
             />
-            <SettingsModal show={showSettingsModal} onDismiss={toggleShowSettingsModal}            
-            />
-
+            <SettingsModal show={showSettingsModal} onDismiss={toggleShowSettingsModal} />
+            <NewsletterModal show={showNewsetterModal} onDismiss={toggleNewsletterModal} />
         </header>
     );
 }

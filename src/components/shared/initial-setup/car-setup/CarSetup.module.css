@@ -1,0 +1,23 @@
+.root {
+    height: 50vh;
+}
+
+.right {
+    padding-left: 20px;
+    border-left: 2px rgb(241, 243, 245) solid;
+}
+
+.left {
+    padding-right: 20px;
+}
+
+.carItem {
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    background-color: rgb(241, 243, 245);
+}
+
+.addBtn {
+    border-width: 2px;
+}

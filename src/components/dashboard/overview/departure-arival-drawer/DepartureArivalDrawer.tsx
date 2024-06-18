@@ -1,15 +1,15 @@
 import { Drawer, Title, Text, RangeSlider, Container, Stack, Accordion, Group, Button, Slider, Box } from "@mantine/core";
-import { Car } from "../../../../../models/Car";
+import { Car } from "../../../../models/Car";
 import classes from './DepartureArivalDrawer.module.css'
 import dayjs from "dayjs";
 import { IconClock } from "@tabler/icons-react";
-import { TimeSlot } from "../../../../../models/TimeSlot";
+import { TimeSlot } from "../../../../models/TimeSlot";
 import { useEffect, useState } from "react";
-import { SimulationEntry } from "../../../../../models/SimulationEntry";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/storeHooks";
-import { saveSim } from "../../../../../redux/simulation-entries/SimulationEntriesSlice";
-import { StateStatus } from "../../../../../models/enums/StateStatus";
-import LoadingOverlay from "../../../../shared/loading-overlay/LoadingOverlay";
+import { SimulationEntry } from "../../../../models/SimulationEntry";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/storeHooks";
+import { saveSim } from "../../../../redux/simulation-entries/SimulationEntriesSlice";
+import { StateStatus } from "../../../../models/enums/StateStatus";
+import LoadingOverlay from "../../../shared/loading-overlay/LoadingOverlay";
 
 dayjs.locale('de')
 
@@ -149,7 +149,7 @@ function DepartureArivalDrawer({ show, onDismiss, car }: Props) {
     
     return (
         
-        <Drawer.Root opened={show} onClose={onDismiss} position="right" size={'xl'}>
+        <Drawer.Root opened={show} onClose={onDismiss} closeOnEscape={false} position="right" size={'xl'}>
             <Drawer.Overlay />
             <Drawer.Content >
                 <Box pos={'relative'}>
