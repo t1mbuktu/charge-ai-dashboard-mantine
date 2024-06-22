@@ -148,14 +148,6 @@ export class ReportService {
         
         const res = await axios.request(config)
 
-        console.log({
-            settings: settings,
-            cars: cars,
-            sim_data: this.getFormattedSimData(cars, sim_data)
-        })
-
-        console.log(res.data)
-
         return res.data as Report
     }
 

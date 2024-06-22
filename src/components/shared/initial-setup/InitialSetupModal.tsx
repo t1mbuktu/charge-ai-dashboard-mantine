@@ -5,6 +5,11 @@ import classes from './InitialSetupModal.module.css'
 import { PersonalSettings, PersonalSettingsRef } from '../../dashboard/settings/PersonalSettings.tsx/PersonalSettings';
 import NavBtn from './nav-btn/NavBtn';
 import { CarSetup, CarSetupRef } from './car-setup/CarSetup';
+import { DepartureArival, DepartureArivalRef } from '../../dashboard/overview/departure-arival-drawer/departure-arival/DepartureArival';
+import { DepartureArivalSetup } from './departure-arival-setup/DepartureArivalSetup';
+import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
+import { getReport } from '../../../redux/report/ReportSlice';
+import { saveSettings } from '../../../redux/settings/SettingsSlice';
 
 type Props = {
     show: boolean;
@@ -12,14 +17,27 @@ type Props = {
 }
 
 function InitialSetupModal({show, onDismiss}: Props) {
+    const dispatch = useAppDispatch();
     const csRef = useRef<CarSetupRef>(null);
     const psRef = useRef<PersonalSettingsRef>(null);
+    const daRef = useRef<DepartureArivalRef>(null);
+
+    const { cars } = useAppSelector(s => s.cars);
+    const { settings } = useAppSelector(s => s.settings);
+    const { simEntries } = useAppSelector(s => s.sims)
 
     const [activeTab, setActiveTab] = useState(0)
 
     const onNavNext = () => {
-        onSave();
-        setActiveTab(activeTab + 1);
+        if(activeTab < 2) {
+            onSave();
+            setActiveTab(activeTab + 1);
+        } else {
+            onSave();
+            dispatch(saveSettings({...settings!, setupCompleted: true}));
+            dispatch(getReport({settings: settings!, cars: cars, sim_data: simEntries}));
+            onDismiss();
+        }
     };
 
     const onNavPrev = () => {
@@ -31,21 +49,21 @@ function InitialSetupModal({show, onDismiss}: Props) {
     const onSave = () => {
         switch (activeTab) {
             case 0:
-                psRef.current?.save()
+                psRef.current?.save();
                 break;
             case 1:
-                csRef.current?.save()
+                csRef.current?.save();
                 break;
             case 2:
-                //TODO: add save for departures
-                break
+                daRef.current?.save();
+                break;
             default:
                 break;
         }
     }
 
     return (
-        <Modal classNames={{content: classes.root}} size={'xl'} opened={show} onClose={onDismiss} title={<Title order={1}>Setup</Title>}>
+        <Modal classNames={{content: classes.mContent, root: classes.root}} opened={show} onClose={onDismiss} title={<Title order={1}>Setup</Title>}>
             <Stack>
                 <Stepper active={activeTab} onStepClick={setActiveTab}>
                     <Stepper.Step
@@ -76,6 +94,9 @@ function InitialSetupModal({show, onDismiss}: Props) {
                     }
                     {activeTab === 1 && 
                     <CarSetup ref={csRef}/>
+                    }
+                    {activeTab === 2 && 
+                    <DepartureArivalSetup ref={daRef}/>
                     }
                     <NavBtn className={classes.actions} onPrev={onNavPrev} onSaveNext={onNavNext} />
                 </Stack>

@@ -12,7 +12,7 @@ type Props = {
 
 function EnergySavedCard({diffEnergyUsed_kwh, diffEnergyUsed_per, period, title}: Props) {
 
-    const DiffIcon = diffEnergyUsed_per > 1 ? IconArrowUpRight : IconArrowDownRight;
+    const DiffIcon = diffEnergyUsed_per > 0 ? IconArrowUpRight : IconArrowDownRight;
 
     return (
         <PaperCard>
@@ -30,7 +30,7 @@ function EnergySavedCard({diffEnergyUsed_kwh, diffEnergyUsed_per, period, title}
             <Group align="flex-end" gap="xs" mt={25}>
                 <Text className={classes.value}>{Math.round(diffEnergyUsed_kwh)+' kWh'}</Text>
                 <Text
-                    c={diffEnergyUsed_per > 1 ? 'teal' : 'red'}
+                    c={diffEnergyUsed_per > 0 ? 'teal' : 'red'}
                     fz="sm"
                     fw={500}
                     className={classes.diff}

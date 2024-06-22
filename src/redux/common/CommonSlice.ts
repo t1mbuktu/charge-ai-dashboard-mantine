@@ -37,6 +37,7 @@ export const commonSlice = createSlice({
         getLoggedInUser(state) {
             const user = AuthService.getLoggedInUser();
             user ? state.currentUser = user : state.currentUser = undefined
+            state.status = StateStatus.succeeded;
         }
     },
     extraReducers(builder) {

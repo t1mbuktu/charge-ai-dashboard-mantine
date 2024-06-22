@@ -6,6 +6,9 @@ export type GeneralSettings = {
     powerPerModule?: number
     zip?: number
     location?: Location
+    feedInRemuneration_kwh?: number
+    electricityPrice_kwh?: number
+    setupCompleted: boolean
 };
 
 export type Location = {

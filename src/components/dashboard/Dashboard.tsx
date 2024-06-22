@@ -10,11 +10,17 @@ import { fetchCars } from '../../redux/car/CarSlice'
 import { fetchSims } from '../../redux/simulation-entries/SimulationEntriesSlice'
 import { fetchSettings } from '../../redux/settings/SettingsSlice'
 import InitialSetupModal from '../shared/initial-setup/InitialSetupModal'
+import { StateStatus } from '../../models/enums/StateStatus'
+import { getReport } from '../../redux/report/ReportSlice'
 
 function Dashboard() {
     const dispatch = useAppDispatch()
     const [currentPage, setCurrentPage] = useState<Pages>(Pages.Overview);
-    const {currentUser} =  useAppSelector(s => s.common);
+    const { currentUser, status: userStatus } =  useAppSelector(s => s.common);
+    const { settings, status: settingsStatus } = useAppSelector(s => s.settings);
+    const { cars } = useAppSelector(s => s.cars);
+    const { simEntries } = useAppSelector(s => s.sims);
+
 
     const [showAuthModal, setShowAuthModal] = useState(true);
     const [showInitalSetup, setShowInitialSetup] = useState(true);
@@ -46,14 +52,28 @@ function Dashboard() {
     useEffect(() => {
         dispatch(getLoggedInUser());
     }, [])
+
+    useEffect(() => {
+        if(settings && cars && simEntries) {
+            console.log('Report refreshed');
+            dispatch(getReport({settings: settings, cars: cars, sim_data: simEntries}));
+        }
+    }, [settings, cars])
+    
     
 
   return (
     <>
         <NavigationBar onNavigate={(p) => setCurrentPage(p)}/>
         { getContent() }
-        <LoginModal show={showAuthModal} onDismiss={() => console.log("first")} />
-        <InitialSetupModal show={showInitalSetup} onDismiss={() => setShowInitialSetup(false)} />
+
+        {userStatus == StateStatus.succeeded && !currentUser && <LoginModal show={showAuthModal}/>}
+        {settingsStatus == StateStatus.succeeded && (!settings || !settings.setupCompleted ) && 
+            <InitialSetupModal 
+                show={showInitalSetup} 
+                onDismiss={() => setShowInitialSetup(false)} 
+            />
+        }
     </>
   );
 }

@@ -1,4 +1,9 @@
 .root {
+    --modal-size: 90vw;
+    max-width: 100px;
+}
+
+.mContent {
     position: relative;
     padding: 0 20px 20px 20px;
     height: 75vh;
@@ -6,6 +11,9 @@
 
 .content {
     height: 100%;
+    max-width: 1000px;
+    min-width: 1000px;
+    align-self: center;
 }
 
 .actions {

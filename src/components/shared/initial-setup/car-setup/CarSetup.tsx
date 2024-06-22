@@ -46,16 +46,17 @@ export const CarSetup = forwardRef<CarSetupRef, {}>((props, ref) => {
 
     useEffect(() => {
         setCars(savedCars);
+        setSelectedCar(savedCars[0]);
     }, [savedCars])
     
 
     return (
         <Grid classNames={{inner: classes.root}}>
-            <GridCol className={classes.left} span={4}>
+            <GridCol className={classes.left} span={3}>
                 <Stack>
                     {cars.length > 0 && cars?.map(car => 
                         <Group 
-                            className={classes.carItem} 
+                            className={[classes.carItem, selectedCar === car && classes.selected].join(' ')} 
                             onClick={() => setSelectedCar(car)}>
                             <IconCar />
                             <Text>{car.name}</Text>
@@ -64,9 +65,9 @@ export const CarSetup = forwardRef<CarSetupRef, {}>((props, ref) => {
                     <Button className={classes.addBtn} onClick={onAddNew} variant="outline">Add New</Button>
                 </Stack>
             </GridCol>
-            <GridCol className={classes.right} span={8}>
-                <CarSettings car={selectedCar} ref={csRef}/>
-                {!selectedCar.id && <Button onClick={onSaveNew}>Add</Button>}
+            <GridCol className={classes.right} span={9}>
+                {selectedCar && <CarSettings car={selectedCar} ref={csRef}/>}
+                {selectedCar && !selectedCar?.id && <Button onClick={onSaveNew}>Add</Button>}
             </GridCol>
             
         </Grid>

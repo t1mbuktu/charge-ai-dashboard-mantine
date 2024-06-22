@@ -55,7 +55,7 @@ function ChargePreviewChartCard() {
 
   const onCreateReport = () => {
     dispatch(getReport({ settings: settings!, sim_data: simEntries, cars: cars }));
-    console.log(report?.smartChargingForecast.chargeForecast[0].data)
+    //console.log(report?.smartChargingForecast.chargeForecast[0].data)
   }
 
   const getCumulativeData = (data: ChargeForecastEntry[]): ChargeForecastEntry[] => {
@@ -103,7 +103,6 @@ function ChargePreviewChartCard() {
         groupedData[forecast.carId][date].push(entry);
       });
     });
-    console.log(groupedData)
     return groupedData;
   }
 

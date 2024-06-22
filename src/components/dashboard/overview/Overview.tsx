@@ -4,6 +4,7 @@ import classes from './Overview.module.css'
 import LiveStatsCard from "./live-stats-card/LiveStatsCard"
 import { useAppSelector } from "../../../hooks/storeHooks"
 import EnergySavedCard from "./energy-saved-card/EnergySavedCard"
+import SavedMoneyCard from "./saved-money-card/SavedMoneyCard"
 
 function Overview() {
 
@@ -14,7 +15,10 @@ function Overview() {
 
     <Grid className={classes.grid}>
       <Grid.Col span={7}>
+        <Stack>
           <ChargePreviewChartCard />
+          {report && <SavedMoneyCard period={"weekly"} title={"Saved Money"} />}
+        </Stack>
       </Grid.Col>
       <Grid.Col span={5}>
         <Stack>
@@ -25,12 +29,12 @@ function Overview() {
         <>
         <EnergySavedCard 
           diffEnergyUsed_kwh={report.smartChargingForecast.solarPowerUsed_kwh} 
-          diffEnergyUsed_per={report.smartChargingForecast.solarPowerUsed_kwh / report.simpleChargingForecast.solarPowerUsed_kwh} 
+          diffEnergyUsed_per={report.smartChargingForecast.solarPowerUsed_kwh / report.simpleChargingForecast.solarPowerUsed_kwh - 1} 
           period={"Weekly"} 
           title={"Solar Energy Used"} />
         <EnergySavedCard 
           diffEnergyUsed_kwh={report.smartChargingForecast.gridPowerUsed_kwh} 
-          diffEnergyUsed_per={report.smartChargingForecast.gridPowerUsed_kwh / report.simpleChargingForecast.gridPowerUsed_kwh} 
+          diffEnergyUsed_per={report.smartChargingForecast.gridPowerUsed_kwh / report.simpleChargingForecast.gridPowerUsed_kwh - 1} 
           period={"Weekly"} 
           title={"Grid Energy Used"} />
         </>

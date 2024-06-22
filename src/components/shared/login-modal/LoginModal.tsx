@@ -4,16 +4,15 @@ import Auth from './login-container/Auth'
 
 type Props = {
     show: boolean
-    onDismiss: () => void
 }
 
-function LoginModal({show, onDismiss}: Props) {
+function LoginModal({show}: Props) {
 
 
   return (
     <Modal 
-      opened={show} 
-      onClose={onDismiss} 
+      opened={show}
+      onClose={() => console.log('')}
       withCloseButton={false} 
       fullScreen
       closeOnEscape={false}
