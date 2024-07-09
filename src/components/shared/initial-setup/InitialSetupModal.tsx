@@ -5,7 +5,7 @@ import classes from './InitialSetupModal.module.css'
 import { PersonalSettings, PersonalSettingsRef } from '../../dashboard/settings/PersonalSettings.tsx/PersonalSettings';
 import NavBtn from './nav-btn/NavBtn';
 import { CarSetup, CarSetupRef } from './car-setup/CarSetup';
-import { DepartureArival, DepartureArivalRef } from '../../dashboard/overview/departure-arival-drawer/departure-arival/DepartureArival';
+import { DepartureArivalRef } from '../../dashboard/overview/departure-arival-drawer/departure-arival/DepartureArival';
 import { DepartureArivalSetup } from './departure-arival-setup/DepartureArivalSetup';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { getReport } from '../../../redux/report/ReportSlice';

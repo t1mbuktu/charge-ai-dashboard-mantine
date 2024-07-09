@@ -21,8 +21,9 @@ function SavedMoneyCard({period, title}: Props) {
         const simpleGridAmount = report?.simpleChargingForecast!.gridPowerUsed_kwh! * settings?.electricityPrice_kwh!;
         const simpleFeedInAmount = (solarPower! - report?.simpleChargingForecast.solarPowerUsed_kwh!) * settings?.feedInRemuneration_kwh!; 
         const simpleExpense = simpleGridAmount - simpleFeedInAmount;
-
+        
         const saved = simpleExpense - smartExpense;
+        console.log(saved)
         return saved;
     }
 

@@ -22,6 +22,8 @@ export class AuthService {
         const user = this.userCredToUser(userCred)
         window.localStorage.setItem("loggedInUser", JSON.stringify(user))
 
+        console.log('reloaded')
+        location.reload();
         return user;
     }
 

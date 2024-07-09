@@ -67,7 +67,7 @@ export const CarSetup = forwardRef<CarSetupRef, {}>((props, ref) => {
             </GridCol>
             <GridCol className={classes.right} span={9}>
                 {selectedCar && <CarSettings car={selectedCar} ref={csRef}/>}
-                {selectedCar && !selectedCar?.id && <Button onClick={onSaveNew}>Add</Button>}
+                {selectedCar && !selectedCar?.id && <Button className={classes.onAddBtn} onClick={onSaveNew}>Add</Button>}
             </GridCol>
             
         </Grid>

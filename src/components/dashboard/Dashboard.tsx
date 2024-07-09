@@ -47,28 +47,28 @@ function Dashboard() {
         } else {
             setShowAuthModal(true);
         }
-    }, [currentUser])
+    }, [currentUser]);
 
     useEffect(() => {
         dispatch(getLoggedInUser());
-    }, [])
+    }, []);
 
     useEffect(() => {
-        if(settings && cars && simEntries) {
+        if(settings && cars && simEntries && settings.setupCompleted) {
             console.log('Report refreshed');
             dispatch(getReport({settings: settings, cars: cars, sim_data: simEntries}));
         }
-    }, [settings, cars])
+    }, [settings, cars]);
     
     
 
   return (
     <>
         <NavigationBar onNavigate={(p) => setCurrentPage(p)}/>
-        { getContent() }
+        { settings?.setupCompleted && getContent() }
 
         {userStatus == StateStatus.succeeded && !currentUser && <LoginModal show={showAuthModal}/>}
-        {settingsStatus == StateStatus.succeeded && (!settings || !settings.setupCompleted ) && 
+        {(!settings || !settings.setupCompleted ) && 
             <InitialSetupModal 
                 show={showInitalSetup} 
                 onDismiss={() => setShowInitialSetup(false)} 
